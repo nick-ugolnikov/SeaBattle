@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>sounds/explosion.wav</file>
+        <file>sounds/watersplash.wav</file>
+        <file>sounds/breaking.wav</file>
+        <file>sounds/aauuu.wav</file>
+        <file>sounds/clonk.wav</file>
+        <file>sounds/easy.wav</file>
+        <file>sounds/woohoo.wav</file>
+        <file>sounds/start.wav</file>
+        <file>pictures/winner.gif</file>
+        <file>pictures/loser.gif</file>
+        <file>documentation/manual.txt</file>
+        <file>documentation/about.txt</file>
+    </qresource>
+</RCC>
