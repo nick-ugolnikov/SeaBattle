@@ -10,11 +10,13 @@ class Fleet : public QObject
 private:
 	PlayerT ptype;			
 	QObject *battleship;
-				
+    int status;		// number of undamaged ships
+    Ship *ship[5];
+
 public:
-	int status;		// number of undamaged ships
-	Ship *ship[5];
-	
+    Ship* getShip(int i) { return ship[i]; }
+    int getStatus() { return status; }
+    void setStatus(int i) { status = i; }
 	
 	Fleet(PlayerT pt, QObject *parent = NULL); // constructor
 	

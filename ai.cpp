@@ -16,7 +16,7 @@ void AI::slotPlaceFleet()
 	mode = setup;
 	int moep=1;
 	//random algorithm
-	while (fleet->status < 5) {	//status will be increased if Player.placeShip() is successful
+    while (fleet->getStatus() < 5) {	//status will be increased if Player.placeShip() is successful
 		if (fleet->createShip() == 0) {
 			while (moep)
 				moep = placeShip(rand()%10, rand()%10, rand()%2);
