@@ -2,7 +2,6 @@
 #define HUMAN_H
 
 #include "player.h"
-class Battleship;
 
 class Human : public Player
 {
@@ -10,6 +9,7 @@ class Human : public Player
 	
 public:
 	Human(PlayerT pt, Battleship *battleship);	// constructor
+    ~Human();
 
 private:
 	Battleship *bship;

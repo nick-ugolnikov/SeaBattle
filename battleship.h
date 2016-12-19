@@ -3,10 +3,10 @@
 
 #include "ui_battleship.h"
 #include "extra_t.h"
-#include "player.h"
-#include "ai.h"
-#include "human.h"
 #include "boxbutton.h"
+#include "player.h"
+#include "human.h"
+#include "ai.h"
 #include "infodialog.h"
 #include "imagedialog.h"
 
@@ -18,14 +18,19 @@ private:
 	AI *enemyPlayer;
 	int round;
 	QString delayedSoundFile;
+    Human *humanPlayer;
+    AlignmentT alignment;
+    bool soundAvailable;
+    bool soundOn;
 
 public:
-	Human *humanPlayer;
-	AlignmentT alignment;
-	bool soundAvailable;
-	bool soundOn;
     Battleship(QWidget *parent = NULL);
     ~Battleship();
+
+    Human* getHumanPlayer() { return humanPlayer; }
+    AlignmentT getAlignment() { return alignment; }
+    bool isSoundAvailable() { return soundAvailable; }
+    bool isSoundOn() { return soundOn; }
 
 	void setupField(Player *player);
 

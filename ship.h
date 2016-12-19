@@ -14,13 +14,15 @@ private:
 	QString  player;
 	int alignment;	//0: horizontal; 1: vertical
 	int status;		// number of undestroyed ship parts (BoxButtons)
-	ShipT stype;
+    ShipT stype;
+    BoxButton **box; // Array of pointers, pointing at the associated BoxButtons
+
 public:
-	BoxButton **box; // Array of pointers, pointing at the associated BoxButtons
-	
 	Ship(PlayerT pt, ShipT t, QObject *parent = NULL);	// constructor
 	~Ship();	// destructor
-	
+
+    void setBBForShipAt(int i, BoxButton* bb) { box[i] = bb; }
+    BoxButton* getBBForShipAt(int i) { return box[i]; }
 	
 	void onFire(BoxButton *hitBox);
 

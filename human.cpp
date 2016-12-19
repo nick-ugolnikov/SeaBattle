@@ -1,10 +1,20 @@
 #include "human.h"
 #include "battleship.h"
 
-Human::Human(PlayerT pt, Battleship *battleship) : Player(pt, (QObject*)battleship)
+Human::Human(PlayerT pt, Battleship *battleship) : Player(pt, battleship)
 {
 	mode = wait;
-	bship = battleship;
+    bship = battleship;
+}
+
+Human::~Human()
+{
+    int row, col;
+    for (row=0; row<10; row++) {
+        for (col=0; col<10; col++) {
+            delete field[row][col];		// deleting the dynamically created BoxButtons
+        }
+    }
 }
 
 void Human::slotPlaceShip(int row, int col, int ali)
@@ -26,7 +36,7 @@ void Human::slotPreviewShip(int row, int col)
 {
 	if (mode == setup) {
 		int i;
-		if (bship->alignment == h) {
+        if (bship->getAlignment() == h) {
 			if (checkBoxes(row, col, 0) == 0) {
                 for (i = col; i < (col+5-fleet->getStatus()); i++) {
 					field[row][i]->setPreview(ok);
@@ -55,7 +65,7 @@ void Human::slotUnPreviewShip(int row, int col)
 {
 	if (mode == setup) {
 		int i;
-		if (bship->alignment == h) {
+        if (bship->getAlignment() == h) {
             for (i = col; (i < (col+6-fleet->getStatus())) && (i < 10); i++) {
 				field[row][i]->setPreview(none);
 			}

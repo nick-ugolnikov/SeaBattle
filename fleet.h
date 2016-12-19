@@ -14,12 +14,11 @@ private:
     Ship *ship[5];
 
 public:
+    Fleet(PlayerT pt, QObject *parent = NULL); // constructor
+
     Ship* getShip(int i) { return ship[i]; }
     int getStatus() { return status; }
     void setStatus(int i) { status = i; }
-	
-	Fleet(PlayerT pt, QObject *parent = NULL); // constructor
-	
 	
 	int createShip();
 	void reset();

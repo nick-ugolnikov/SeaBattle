@@ -11,12 +11,13 @@ class BoxButton : public QPushButton {
    Q_OBJECT
 
 public:
-	int position[2];			 //[0]=row  [1]=col
-	Ship *associatedShip;	//to which ship it belongs
-	bool ewoMode;
-
 	BoxButton(PlayerT p, Battleship *battleship, QWidget *parent=NULL);	// constructor
 	
+    Ship* getAssociatedShip() { return associatedShip; }
+    void setAssociatedShip(Ship *ship) { associatedShip = ship; }
+    bool isEasyWin() { return ewoMode; }
+    void enableEasyWin(bool flag) { ewoMode = flag; }
+    int* getPosition() { return position; }
 	ConditionT onFire();
 	ConditionT getCondition();
 	ConditionT setCondition(ConditionT c);
@@ -32,6 +33,9 @@ private:
 	ConditionT condition;
 	PreviewT preview;
 	PlayerT playert;			//to which player it belongs
+    int position[2];			 //[0]=row  [1]=col
+    Ship *associatedShip;	//to which ship it belongs
+    bool ewoMode;
 		   
 public slots:
 	void slotOnClick();

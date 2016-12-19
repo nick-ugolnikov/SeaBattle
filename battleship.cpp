@@ -87,22 +87,8 @@ Battleship::Battleship(QWidget *parent) : QMainWindow(parent)
 // Destructor
 Battleship::~Battleship()
 {
-	int row, col;
-	for (row=0; row<10; row++) {
-		for (col=0; col<10; col++) {
-			delete humanPlayer->field[row][col];		// deleting the dynamically created BoxButtons
-		}
-	}
-
-	for (row=0; row<10; row++) {
-		for (col=0; col<10; col++) {
-			delete enemyPlayer->field[row][col];		// deleting the dynamically created BoxButtons
-		}
-	}
-
 	delete enemyPlayer;
 	delete humanPlayer;
-
 }
 
 
@@ -116,18 +102,18 @@ void Battleship::setupField(Player *player)
 	sizePolicy.setVerticalStretch(1);
 	for (row=0; row<10; row++) {
 		for (col=0; col<10; col++) {
-			player->field[row][col] = new BoxButton(player->ptype, this);
-			player->field[row][col]->setSizePolicy(sizePolicy);
-			player->field[row][col]->setFocusPolicy(Qt::NoFocus);
-			player->field[row][col]->setMinimumSize(20,20);
-			if (player->ptype == human) {
-                gridLayout3->addWidget(player->field[row][col], row, col);
+            player->createBBAt(row, col);
+            player->getBBAt(row, col)->setSizePolicy(sizePolicy);
+            player->getBBAt(row, col)->setFocusPolicy(Qt::NoFocus);
+            player->getBBAt(row, col)->setMinimumSize(20,20);
+            if (player->getPlayerType() == human) {
+                gridLayout3->addWidget(player->getBBAt(row, col), row, col);
 			}
 			else {
-                gridLayout2->addWidget(player->field[row][col], row, col);
+                gridLayout2->addWidget(player->getBBAt(row, col), row, col);
 			}
-			player->field[row][col]->position[0] = row;
-			player->field[row][col]->position[1] = col;
+            player->getBBAt(row, col)->getPosition()[0] = row;
+            player->getBBAt(row, col)->getPosition()[1] = col;
 		}
 	}
 	return;
@@ -136,11 +122,11 @@ void Battleship::setupField(Player *player)
 void Battleship::slotClickOnField(PlayerT pt, int row, int col)
 {
 	// Place Ship
-    if (humanPlayer->mode == setup && pt == human)	{ // pt=PlayerType means: from which field the clickedEvent has been called
+    if (humanPlayer->getMode() == setup && pt == human)	{ // pt=PlayerType means: from which field the clickedEvent has been called
 		emit sigHumanPlaceShip(row, col, (int) alignment);	//TO: player.slotPlaceShip
 	}
 	// Fire on enemy field
-	if (humanPlayer->mode == shot && enemyPlayer->mode == shot && pt == enemy && turn == human) {
+    if (humanPlayer->getMode() == shot && enemyPlayer->getMode() == shot && pt == enemy && turn == human) {
 		blockBoxSignals(true);
         turn = enemy;
 		emit sigShotAtEnemy(row, col);	//TO: enemyPlayer.slotShotAt(row, col)
@@ -171,8 +157,8 @@ void Battleship::slotSetEwoMode(bool checked)
 	if (checked) {
 		for (row=0; row<10; row++) {
 			for (col=0; col<10; col++) {
-				enemyPlayer->field[row][col]->ewoMode=true;
-				enemyPlayer->field[row][col]->updateColor();
+                enemyPlayer->getBBAt(row, col)->enableEasyWin(true);
+                enemyPlayer->getBBAt(row, col)->updateColor();
 			}
 		}
         statusbar->showMessage("Easy Win мод включен", 1000);
@@ -180,8 +166,8 @@ void Battleship::slotSetEwoMode(bool checked)
 	} else {
 		for (row=0; row<10; row++) {
 			for (col=0; col<10; col++) {
-				enemyPlayer->field[row][col]->ewoMode=false;
-				enemyPlayer->field[row][col]->updateColor();
+                enemyPlayer->getBBAt(row, col)->enableEasyWin(false);
+                enemyPlayer->getBBAt(row, col)->updateColor();
             }
             statusbar->showMessage("Easy Win мод выключен", 1000);
         }
@@ -241,9 +227,9 @@ void Battleship::slotGameOver(PlayerT pt)
 
 void Battleship::slotPlayerReady()
 {
-	if (humanPlayer->mode == wait && enemyPlayer->mode == wait) {
-		humanPlayer->mode = shot;
-		enemyPlayer->mode = shot;
+    if (humanPlayer->getMode() == wait && enemyPlayer->getMode() == wait) {
+        humanPlayer->setMode(shot);
+        enemyPlayer->setMode(shot);
 		turn = human; 	// humanPlayer's turn
         gridLayoutEnemy->setCursor(QCursor(Qt::CrossCursor));
         gridLayoutHuman->setCursor(QCursor(Qt::ForbiddenCursor));
@@ -289,14 +275,14 @@ void Battleship::blockBoxSignals(bool block)
 	int row, col;
 	for (row=0; row<10; row++) {
 		for (col=0; col<10; col++) {
-			enemyPlayer->field[row][col]->blockSignals(block);
+            enemyPlayer->getBBAt(row, col)->blockSignals(block);
 		}
 	}
 }
 
 bool Battleship::eventFilter(QObject *obj, QEvent *event)
 {
-	if (event->type() == QEvent::MouseButtonRelease && humanPlayer->mode == setup) {
+    if (event->type() == QEvent::MouseButtonRelease && humanPlayer->getMode() == setup) {
 		QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 		if (mouseEvent->button() == Qt::RightButton) {
             int row = mouseEvent->y()*10/gridLayoutHuman->height();

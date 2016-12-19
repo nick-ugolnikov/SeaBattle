@@ -12,8 +12,8 @@ BoxButton::BoxButton(PlayerT p, Battleship *battleship, QWidget *parent)  : QPus
 	connect(this, SIGNAL(clicked()), this, SLOT(slotOnClick()));
 	connect(this, SIGNAL(sigRelayClick(PlayerT, int, int)), battleship, SLOT(slotClickOnField(PlayerT, int, int)));
     if (playert == human) {
-        connect(this, SIGNAL(sigPreview(int, int)), battleship->humanPlayer, SLOT(slotPreviewShip(int, int)));
-        connect(this, SIGNAL(sigUnPreview(int, int)), battleship->humanPlayer, SLOT(slotUnPreviewShip(int, int)));
+        connect(this, SIGNAL(sigPreview(int, int)), battleship->getHumanPlayer(), SLOT(slotPreviewShip(int, int)));
+        connect(this, SIGNAL(sigUnPreview(int, int)), battleship->getHumanPlayer(), SLOT(slotUnPreviewShip(int, int)));
 	}
 }
 

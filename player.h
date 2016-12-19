@@ -11,23 +11,27 @@ class Player : public QObject
 	Q_OBJECT
 
 private:
+    Battleship* battleship_parent;
+    int setBoxes(int row, int col, int ali);
 
+protected:
+    PlayerT ptype;
+    BoxButton *field[10][10];
+    Fleet *fleet;
+    GameModeT mode;	//Game Mode (setup, shot, wait)
 
 public:
-	PlayerT ptype;
-	BoxButton *field[10][10];
-	Fleet *fleet;
-	GameModeT mode;	//Game Mode (setup, shot, wait)
-
-	Player(PlayerT pt, QObject *battleship);	// constructor
+    Player(PlayerT pt, Battleship *battleship);	// constructor
 	~Player();		// destructor
 
+    BoxButton* getBBAt(int row, int col) { return field[row][col]; }
+    void createBBAt(int row, int col);
+    PlayerT getPlayerType() { return ptype; }
+    GameModeT getMode() { return mode; }
+    void setMode(GameModeT mmode) { mode = mmode; }
 	int placeShip(int row, int col, int ali);
 	int checkBoxes(int row, int col, int ali);
 	void reset();
-
-private:
-	int setBoxes(int row, int col, int ali);
 
 public slots:
 	void slotPlaceFleet();

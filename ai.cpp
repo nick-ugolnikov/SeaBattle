@@ -4,11 +4,21 @@
 #include <time.h>
 #include <iostream>
 
-AI::AI(PlayerT pt, QObject *battleship) : Player(pt, battleship)
+AI::AI(PlayerT pt, Battleship *battleship) : Player(pt, battleship)
 {
 	mode = wait;
 	srand(time(NULL));
-	resetStrategy();
+    resetStrategy();
+}
+
+AI::~AI()
+{
+    int row, col;
+    for (row=0; row<10; row++) {
+        for (col=0; col<10; col++) {
+            delete field[row][col];		// deleting the dynamically created BoxButtons
+        }
+    }
 }
 
 void AI::slotPlaceFleet()
@@ -37,7 +47,7 @@ void AI::reset()
 	for (row=0; row<10; row++) {
 		for (col=0; col<10; col++) {
 			field[row][col]->setCondition(ocean);
-			field[row][col]->associatedShip=NULL;
+            field[row][col]->setAssociatedShip(NULL);
 			field[row][col]->updateColor();
 		}
 	}

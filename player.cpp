@@ -1,9 +1,10 @@
 #include "player.h"
 
-Player::Player(PlayerT pt, QObject *battleship) : QObject(battleship)
+Player::Player(PlayerT pt, Battleship *battleship) : QObject((QObject*)battleship)
 {
 	ptype = pt;
-	fleet = new Fleet(ptype, battleship);
+    fleet = new Fleet(ptype, (QObject*)battleship);
+    battleship_parent = battleship;
 }
 
 int Player::placeShip(int row, int col, int ali)
@@ -28,6 +29,11 @@ Player::~Player()
 {
 	delete fleet;
 
+}
+
+void Player::createBBAt(int row, int col)
+{
+    field[row][col] = new BoxButton(ptype, battleship_parent);
 }
 
 void Player::slotPlaceFleet()
@@ -67,8 +73,8 @@ int Player::setBoxes(int row, int col, int ali)
 					field[row+1][c]->setCondition(restricted);
 				if (row-1 >= 0)
 					field[row-1][c]->setCondition(restricted);
-                field[row][c]->associatedShip = fleet->getShip(fleet->getStatus());
-                fleet->getShip(fleet->getStatus())->box[i] = field[row][c];
+                field[row][c]->setAssociatedShip(fleet->getShip(fleet->getStatus()));
+                fleet->getShip(fleet->getStatus())->setBBForShipAt(i, field[row][c]);
 				i++;
 			} else if (c >= 0 && c < 10) {
 				field[row][c]->setCondition(restricted);
@@ -89,8 +95,8 @@ int Player::setBoxes(int row, int col, int ali)
 					field[r][col+1]->setCondition(restricted);
 				if (col-1 >= 0)
 					field[r][col-1]->setCondition(restricted);
-                field[r][col]->associatedShip = fleet->getShip(fleet->getStatus());
-                fleet->getShip(fleet->getStatus())->box[i] = field[r][col];
+                field[r][col]->setAssociatedShip(fleet->getShip(fleet->getStatus()));
+                fleet->getShip(fleet->getStatus())->setBBForShipAt(i, field[r][col]);
 				i++;
 			} else if (r >= 0 && r < 10) {
 				field[r][col]->setCondition(restricted);
@@ -156,7 +162,7 @@ void Player::reset()
 	for (row=0; row<10; row++) {
 		for (col=0; col<10; col++) {
 			field[row][col]->setCondition(ocean);
-			field[row][col]->associatedShip=NULL;
+            field[row][col]->setAssociatedShip(NULL);
 			field[row][col]->updateColor();
 		}
 	}

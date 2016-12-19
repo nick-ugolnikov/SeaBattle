@@ -10,7 +10,8 @@ class AI : public Player
 	Q_OBJECT
 	
 public:
-	AI(PlayerT pt, QObject *battleship);	// constructor
+    AI(PlayerT pt, Battleship *battleship);	// constructor
+    ~AI();
 	
 	void reset();
 	
